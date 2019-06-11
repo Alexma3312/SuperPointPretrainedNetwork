@@ -12,6 +12,7 @@ from SuperPointPretrainedNetwork.demo_superpoint import (PointTracker,
 
 # pylint: disable=no-member
 
+
 class FrontEnd(object):
     """Save superpoint extracted features to files."""
 
@@ -83,16 +84,19 @@ class FrontEnd(object):
 
         features = [np.hstack((point, desc_data[i]))
                     for i, point in enumerate(kp_data)]
-        # features.insert(0, np.array([nrpoints, descriptor_length, ]))
-        features.insert(0, [0.0]*258)
         features = np.array(features)
-        features[0][1] = descriptor_length
-        features[0][0] = nrpoints
 
         dirName = self.basedir+'features/'
         if not os.path.exists(dirName):
             os.mkdir(dirName)
-        np.savetxt(dirName+self.leading_zero(index)+'.key', features)
+        np.savetxt(dirName+self.leading_zero(index) +
+                   '.key', features, fmt='%.4f')
+
+        first_line = str(nrpoints)+' '+str(descriptor_length)+'\n'
+        with open(dirName+self.leading_zero(index)+'.key', 'r+') as f:
+            content = f.read()
+            f.seek(0, 0)
+            f.write(first_line+content)
 
     def leading_zero(self, index):
         """Create leading zero filename"""
