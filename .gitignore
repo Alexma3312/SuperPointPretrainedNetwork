@@ -1,0 +1,10 @@
+# build folder
+/build*
+/.settings/
+*.jpg
+*.key
+*.bin
+*.ipch
+*.bmp
+*.out
+*.pyc
